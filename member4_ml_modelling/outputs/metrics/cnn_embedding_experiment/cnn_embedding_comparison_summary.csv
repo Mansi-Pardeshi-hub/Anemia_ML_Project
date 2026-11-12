@@ -1,0 +1,8 @@
+dataset,model,feature_type,split,n_test,MAE_g/dL,RMSE_g/dL,R2
+eye,cnn_embedding_xgboost,M3 CNN embedding,held-out test,89,1.745219507110253,2.290677058619658,0.3152027846982034
+eye,existing_handcrafted_xgboost,Member 4 handcrafted,held-out test,89,1.4176759494382023,1.974400010850373,0.4912498591962502
+nail,cnn_embedding_xgboost,M3 CNN embedding,held-out test,109,2.042460767063526,2.6010140351526614,-0.200618583582518
+nail,existing_handcrafted_xgboost,Member 4 handcrafted,held-out test,109,1.7170691009174313,2.307867099038393,0.0547618061178444
+full_hand,palm_checkpoint_transfer_xgboost,M3 Palm classifier transferred embedding (exploratory),held-out test,38,2.097023361607602,2.616310117785349,-0.1304953084491975
+full_hand,fullhand_scratch_cnn_embedding_xgboost,"Member 4 Full-hand CNN trained from scratch, 64-D embedding",held-out test,38,1.5598706672066134,1.8946331154056428,0.40715580642203797
+full_hand,existing_handcrafted_xgboost,Member 4 handcrafted,held-out test,38,1.581858592105263,2.0354729440891957,0.3157402553448133

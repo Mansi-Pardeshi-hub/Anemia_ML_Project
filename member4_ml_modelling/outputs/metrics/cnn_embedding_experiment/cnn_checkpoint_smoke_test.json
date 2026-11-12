@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "datasets": [
+    {
+      "dataset": "eye",
+      "checkpoint": "datasets/member3_extracted/models/eye/best_regression_model.pth",
+      "ok": true,
+      "n_compared": 2,
+      "input_shape": [
+        2,
+        3,
+        224,
+        224
+      ],
+      "embedding_shape": [
+        2,
+        1024
+      ],
+      "max_abs_diff": [
+        4.995575064725699e-10,
+        4.993896407512466e-10
+      ],
+      "image_ids": [
+        "eye_edi:India/14/20200204_154215.jpg",
+        "eye_edi:India/14/20200204_154215_forniceal.jpg"
+      ],
+      "weights_only": true
+    },
+    {
+      "dataset": "nail",
+      "checkpoint": "datasets/member3_extracted/models/nail_skin/best_nail_regression_model.pth",
+      "ok": true,
+      "n_compared": 2,
+      "input_shape": [
+        2,
+        3,
+        224,
+        224
+      ],
+      "embedding_shape": [
+        2,
+        1024
+      ],
+      "max_abs_diff": [
+        4.834899813843663e-09,
+        4.999694547258571e-10
+      ],
+      "image_ids": [
+        "figshare_nail:images/nail_crops/0006_nail_1.jpg",
+        "figshare_nail:images/nail_crops/0006_nail_2.jpg"
+      ],
+      "weights_only": true
+    }
+  ]
+}

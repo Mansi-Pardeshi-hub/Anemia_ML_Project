@@ -1,0 +1,8 @@
+{
+  "MAE_g/dL": 1.7593,
+  "RMSE_g/dL": 2.3361,
+  "R2": 0.0315,
+  "n_samples": 109,
+  "units": "g/dL",
+  "model": "Random Forest"
+}

@@ -1,0 +1,8 @@
+{
+  "MAE_g/dL": 1.8596,
+  "RMSE_g/dL": 2.5022,
+  "R2": -0.1111,
+  "n_samples": 109,
+  "units": "g/dL",
+  "model": "Extra Trees"
+}

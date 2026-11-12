@@ -1,0 +1,8 @@
+{
+  "MAE_g/dL": 1.5819,
+  "RMSE_g/dL": 2.0355,
+  "R2": 0.3157,
+  "n_samples": 38,
+  "units": "g/dL",
+  "model": "XGBoost (Full-hand)"
+}

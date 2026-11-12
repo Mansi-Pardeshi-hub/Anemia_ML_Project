@@ -1,0 +1,4 @@
+MAE_g_dl,RMSE_g_dl,R2,n_test,val_MAE,best_params,label
+1.5819,2.0355,0.3157,38,1.6914,"{'n_estimators': 300, 'max_depth': 3, 'learning_rate': 0.05, 'subsample': 0.7}",Full-hand only
+1.8289,2.4117,0.0394,38,2.2285,"{'n_estimators': 300, 'max_depth': 6, 'learning_rate': 0.05, 'subsample': 0.8}",Nail-only (participant-level)
+1.6792,2.2338,0.1759,38,1.8144,"{'n_estimators': 300, 'max_depth': 3, 'learning_rate': 0.05, 'subsample': 0.7}",Fused (Full+Nail)

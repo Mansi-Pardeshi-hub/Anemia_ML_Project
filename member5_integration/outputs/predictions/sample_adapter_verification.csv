@@ -1,0 +1,5 @@
+adapter,image_path,true_hb_g_dl,saved_prediction_g_dl,adapter_prediction_g_dl,abs_diff,exact_match
+full_hand_handcrafted_xgb,C:\Users\nethr\Downloads\Anemia_ML_Project\datasets\figshare_extracted\Figshare_Hb_Preprocessed\images\full_images\0006_full.jpg,13.8,15.072118,15.072117805480957,1.9451904265110898e-07,True
+nail_handcrafted_xgb,C:\Users\nethr\Downloads\Anemia_ML_Project\datasets\figshare_extracted\Figshare_Hb_Preprocessed\images\nail_crops\0006_nail_1.jpg,13.8,12.229047,12.229046821594238,1.7840576127525765e-07,True
+eye_handcrafted_xgb,C:\Users\nethr\Downloads\Anemia_ML_Project\datasets\eye_extracted\dataset_edi\Eye_Preprocessed\India\14\20200204_154215.jpg,9.1,11.613071,11.61307144165039,4.416503909254743e-07,True
+full_hand_scratch_cnn_xgb,C:\Users\nethr\Downloads\Anemia_ML_Project\datasets\figshare_extracted\Figshare_Hb_Preprocessed\images\full_images\0006_full.jpg,13.8,15.0430431366,15.04304313659668,3.320010932839068e-12,True

@@ -1,0 +1,38 @@
+{
+  "dataset": "eye",
+  "dataset_id": "eye_edi",
+  "checkpoint": "datasets/member3_extracted/models/eye/best_regression_model.pth",
+  "checkpoint_sha256": "ac91ff918d0d47733d31ef1028c3a76a033b5840df89b453f13c4cda2df492fc",
+  "checkpoint_load": "torch.load(map_location='cpu', weights_only=True)",
+  "checkpoint_static_unsafe_globals": [
+    "numpy.core.multiarray.scalar",
+    "numpy.dtype"
+  ],
+  "safe_globals_allowlisted": [
+    "numpy.dtype",
+    "numpy.core.multiarray.scalar",
+    "numpy.dtypes.Float64DType"
+  ],
+  "member3_architecture_source": "datasets\\member3_extracted\\src\\utils.py",
+  "architecture": "Member 3 LightweightCNN + RegressionCNN, reconstructed by compiling only these class definitions from utils.py; strict state_dict load",
+  "pretrained": false,
+  "embedding_layer": "RegressionCNN.backbone.get_features() after adaptive average pooling and before regression classifier",
+  "embedding_dimension": 1024,
+  "preprocessing": "RGB; Pillow bilinear resize 224x224; float32 /255; ImageNet mean [0.485,0.456,0.406], std [0.229,0.224,0.225]; no augmentation at inference",
+  "runtime": {
+    "python": "3.10.0",
+    "torch": "2.14.1+cpu",
+    "torchvision": "0.29.1+cpu",
+    "device": "cpu"
+  },
+  "input_manifest": "member4_ml_modelling\\outputs\\embeddings\\eye_regression_input_manifest.csv",
+  "output_embeddings": "member4_ml_modelling\\outputs\\embeddings\\m3_eye_regression_embeddings.csv",
+  "rows": 610,
+  "split_counts": {
+    "validation": 89,
+    "train": 432,
+    "test": 89
+  },
+  "participants": 202,
+  "all_values_finite": true
+}

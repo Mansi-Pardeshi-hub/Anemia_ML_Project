@@ -1,0 +1,21 @@
+{
+  "method": "64-bit DCT perceptual hash; grayscale 32x32 Lanczos resize; median threshold over non-DC 8x8 coefficients",
+  "candidate_threshold_hamming_distance_inclusive": 4,
+  "automatic_exclusion_rule": "cross-split candidate with pHash distance <= 4 and SSIM >= 0.98; remove test-side exact-hash copies only",
+  "unique_exact_content_images_scanned": 2060,
+  "candidate_pairs": 36,
+  "cross_split_pairs": 17,
+  "high_confidence_ssim_threshold": 0.98,
+  "high_confidence_cross_split_pairs": 4,
+  "cross_group_pairs": 36,
+  "label_conflict_pairs": 3,
+  "distance_counts": {
+    "0": 7,
+    "2": 5,
+    "4": 24
+  },
+  "candidate_pairs_csv": "member4_ml_modelling\\outputs\\metrics\\palm_near_duplicate_candidates.csv",
+  "test_images_excluded": 4,
+  "raw_source_rows_removed_by_exclusion_hashes": 12,
+  "test_exclusion_ledger": "member4_ml_modelling\\outputs\\metrics\\palm_near_duplicate_test_exclusions.csv"
+}

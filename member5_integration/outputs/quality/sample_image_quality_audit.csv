@@ -1,0 +1,16 @@
+modality,participant_id,is_readable,width,height,brightness_mean,contrast_std,blur_score,saturation_mean,warning_count,warnings
+full_hand,6,True,224,224,207.68,44.89,329.38,42.34,0,
+full_hand,15,True,224,224,226.12,28.93,269.71,29.59,1,Image appears very bright/overexposed (mean 226.1/255). Threshold: >220.0.
+full_hand,17,True,224,224,226.69,30.91,300.77,25.32,1,Image appears very bright/overexposed (mean 226.7/255). Threshold: >220.0.
+full_hand,26,True,224,224,221.01,34.14,316.35,29.19,1,Image appears very bright/overexposed (mean 221.0/255). Threshold: >220.0.
+full_hand,33,True,224,224,226.47,30.25,326.34,22.44,1,Image appears very bright/overexposed (mean 226.5/255). Threshold: >220.0.
+nail,6,True,224,224,180.5,92.08,912.05,30.56,0,
+nail,6,True,224,224,184.12,69.47,772.99,59.89,1,Framing warning: central 50% region is nearly uniform (std=2.4). Ensure the target tissue occupies the center of the frame.
+nail,6,True,224,224,159.26,71.44,615.8,58.2,0,
+nail,15,True,224,224,149.82,111.68,958.65,29.93,1,Framing warning: central 50% region is nearly uniform (std=2.8). Ensure the target tissue occupies the center of the frame.
+nail,15,True,224,224,130.39,96.8,696.06,42.19,0,
+eye,India_14,True,224,224,83.53,69.32,350.08,64.44,0,
+eye,India_14,True,224,224,38.83,65.37,165.65,32.46,0,
+eye,India_14,True,224,224,38.83,65.37,165.77,32.4,0,
+eye,India_14,True,224,224,4.86,23.5,189.77,19.22,1,Image appears very dark (mean brightness 4.9/255). Threshold: <30.0.
+eye,India_3,True,224,224,88.66,69.84,491.99,63.75,0,

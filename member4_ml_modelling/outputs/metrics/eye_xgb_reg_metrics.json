@@ -1,0 +1,8 @@
+{
+  "MAE_g/dL": 1.4177,
+  "RMSE_g/dL": 1.9744,
+  "R2": 0.4912,
+  "n_samples": 89,
+  "units": "g/dL",
+  "model": "XGBoost (Eye)"
+}

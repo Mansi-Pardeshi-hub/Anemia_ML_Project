@@ -1,0 +1,116 @@
+{
+  "passed": 22,
+  "failed": 0,
+  "tests": [
+    {
+      "name": "1. Project root resolution",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "2a. Eye XGBoost bundle schema",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "2b. Nail XGBoost bundle schema",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "2c. Full-hand XGBoost bundle",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "2d. Eye classification bundle",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "3. Feature column ordering",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "4a. Quality: unreadable file",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "4b. Quality: very small image",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "4c. Quality: very dark image",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "4d. Quality: very bright image",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "4e. Quality: ok image",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "5a. Full-hand adapter prediction",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "5b. Eye adapter prediction",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "5c. Adapter: unreadable image",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "6a. Pairing audit passes",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "6b. Full-hand one-to-one",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "6c. Nail crop aggregation",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "6d. Split integrity (no leakage)",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "7. Fusion input dimensions (260)",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "8. Prediction consistency",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "9. App inference matches saved CSV",
+      "status": "PASS",
+      "message": ""
+    },
+    {
+      "name": "10. No training code in app/adapters",
+      "status": "PASS",
+      "message": ""
+    }
+  ]
+}

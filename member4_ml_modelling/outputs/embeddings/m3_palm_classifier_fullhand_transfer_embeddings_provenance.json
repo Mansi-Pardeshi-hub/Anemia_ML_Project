@@ -1,0 +1,29 @@
+{
+  "status": "exploratory cross-dataset feature transfer; not a Full-hand-trained CNN",
+  "checkpoint": "datasets\\member3_extracted\\models\\palm\\best_model.pth",
+  "checkpoint_sha256": "6c9eda8cb5b9b42b4a711ee8380d3ac01a971c30eeea3ab3cf1d24244e622b03",
+  "checkpoint_safe_load": "torch.load(map_location='cpu', weights_only=True)",
+  "checkpoint_static_unsafe_globals": [],
+  "source_training_task": "M3 Palm binary classifier on filename-derived folder classes; config says labels not clinically verified and no measured Hb",
+  "source_training_data_root": "C:\\Users\\Mansi pardeshi\\Downloads\\ML project\\PalmDataset\\Palm_Dataset_Preprocessed",
+  "target_training_data": "Figshare Full-hand images with source-provided numeric Hb g/dL",
+  "architecture": "M3 LightweightCNN(num_classes=2, dropout=0.3), strict state_dict load; pooled get_features() before class head",
+  "pretrained": false,
+  "embedding_dimension": 1024,
+  "preprocessing": "RGB; Pillow bilinear resize 224x224; float32 /255; ImageNet mean/std; no augmentation at inference",
+  "runtime": {
+    "python": "3.10.0",
+    "torch": "2.14.1+cpu",
+    "device": "cpu"
+  },
+  "rows": 250,
+  "split_counts": {
+    "train": 175,
+    "validation": 37,
+    "test": 38
+  },
+  "participants": 250,
+  "all_embeddings_finite": true,
+  "input_manifest": "member4_ml_modelling\\outputs\\embeddings\\full_hand_palm_transfer_input_manifest.csv",
+  "output_embeddings": "member4_ml_modelling\\outputs\\embeddings\\m3_palm_classifier_fullhand_transfer_embeddings.csv"
+}

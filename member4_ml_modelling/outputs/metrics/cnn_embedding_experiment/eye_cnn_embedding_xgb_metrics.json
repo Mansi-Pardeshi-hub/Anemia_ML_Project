@@ -1,0 +1,57 @@
+{
+  "dataset": "eye",
+  "dataset_id": "eye_edi",
+  "task": "Hb regression (g/dL)",
+  "feature_source": "Member 3 scratch-trained RegressionCNN pooled 1,024-D embedding",
+  "checkpoint": "datasets/member3_extracted/models/eye/best_regression_model.pth",
+  "checkpoint_sha256": "ac91ff918d0d47733d31ef1028c3a76a033b5840df89b453f13c4cda2df492fc",
+  "checkpoint_safe_load": "torch.load(map_location='cpu', weights_only=True)",
+  "preprocessing": "RGB; Pillow bilinear resize 224x224; float32 /255; ImageNet mean [0.485,0.456,0.406], std [0.229,0.224,0.225]; no augmentation at inference",
+  "split_counts": {
+    "train": 432,
+    "validation": 89,
+    "test": 89
+  },
+  "participants": 202,
+  "test_rows_same_as_handcrafted_xgb": 89,
+  "validation_selection_metric": "MAE g/dL",
+  "best_validation_mae_g_dl": 1.6589369773864746,
+  "selected_xgboost_parameters": {
+    "n_estimators": 300,
+    "max_depth": 3,
+    "learning_rate": 0.05,
+    "subsample": 0.7
+  },
+  "test_metrics": {
+    "cnn_embedding_xgboost": {
+      "MAE_g/dL": 1.745219507110253,
+      "RMSE_g/dL": 2.290677058619658,
+      "R2": 0.3152027846982034,
+      "n_samples": 89
+    },
+    "existing_handcrafted_xgboost": {
+      "MAE_g/dL": 1.4176759494382023,
+      "RMSE_g/dL": 1.974400010850373,
+      "R2": 0.4912498591962502,
+      "n_samples": 89
+    }
+  },
+  "metric_delta_cnn_minus_handcrafted": {
+    "MAE_g/dL": 0.3275435576720507,
+    "RMSE_g/dL": 0.3162770477692851,
+    "R2": -0.1760470744980468
+  },
+  "artifacts": {
+    "embeddings": "member4_ml_modelling\\outputs\\embeddings\\m3_eye_regression_embeddings.csv",
+    "predictions": "member4_ml_modelling\\outputs\\metrics\\cnn_embedding_experiment\\eye_cnn_embedding_xgb_predictions.csv",
+    "model": "member4_ml_modelling\\outputs\\models\\cnn_embedding\\m3_eye_cnn_embedding_xgb.pkl",
+    "comparison_plot": "member4_ml_modelling\\outputs\\plots\\cnn_embedding\\eye_cnn_embedding_xgb_vs_handcrafted.png"
+  },
+  "limitations": [
+    "Research prototype; not clinical validation.",
+    "Member 3 checkpoint was trained on the same training/validation partitions; test was held out.",
+    "Eye uses the duplicate-corrected 89-row test split; Nail uses 109 test nail crops from participant-disjoint splits.",
+    "No full-hand regression checkpoint exists in the supplied archive; this experiment covers Eye and Nail only.",
+    "No paired modalities; this is not multimodal fusion."
+  ]
+}

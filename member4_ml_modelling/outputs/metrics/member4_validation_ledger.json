@@ -1,0 +1,436 @@
+{
+  "handcrafted": [
+    {
+      "check": "eye_rf_regression",
+      "ok": true,
+      "recomputed": {
+        "MAE_g/dL": 1.5165,
+        "RMSE_g/dL": 2.0524,
+        "R2": 0.4502,
+        "n_samples": 89,
+        "units": "g/dL"
+      },
+      "mismatches": []
+    },
+    {
+      "check": "eye_et_regression",
+      "ok": true,
+      "recomputed": {
+        "MAE_g/dL": 1.437,
+        "RMSE_g/dL": 1.9832,
+        "R2": 0.4867,
+        "n_samples": 89,
+        "units": "g/dL"
+      },
+      "mismatches": []
+    },
+    {
+      "check": "eye_xgb_regression",
+      "ok": true,
+      "recomputed": {
+        "MAE_g/dL": 1.4177,
+        "RMSE_g/dL": 1.9744,
+        "R2": 0.4912,
+        "n_samples": 89,
+        "units": "g/dL"
+      },
+      "mismatches": []
+    },
+    {
+      "check": "nail_rf_regression",
+      "ok": true,
+      "recomputed": {
+        "MAE_g/dL": 1.7593,
+        "RMSE_g/dL": 2.3361,
+        "R2": 0.0315,
+        "n_samples": 109,
+        "units": "g/dL"
+      },
+      "mismatches": []
+    },
+    {
+      "check": "nail_et_regression",
+      "ok": true,
+      "recomputed": {
+        "MAE_g/dL": 1.8596,
+        "RMSE_g/dL": 2.5022,
+        "R2": -0.1111,
+        "n_samples": 109,
+        "units": "g/dL"
+      },
+      "mismatches": []
+    },
+    {
+      "check": "nail_xgb_regression",
+      "ok": true,
+      "recomputed": {
+        "MAE_g/dL": 1.7171,
+        "RMSE_g/dL": 2.3079,
+        "R2": 0.0548,
+        "n_samples": 109,
+        "units": "g/dL"
+      },
+      "mismatches": []
+    },
+    {
+      "check": "full_hand_rf_regression",
+      "ok": true,
+      "recomputed": {
+        "MAE_g/dL": 1.5575,
+        "RMSE_g/dL": 1.9611,
+        "R2": 0.3649,
+        "n_samples": 38,
+        "units": "g/dL"
+      },
+      "mismatches": []
+    },
+    {
+      "check": "full_hand_et_regression",
+      "ok": true,
+      "recomputed": {
+        "MAE_g/dL": 1.5215,
+        "RMSE_g/dL": 1.8952,
+        "R2": 0.4068,
+        "n_samples": 38,
+        "units": "g/dL"
+      },
+      "mismatches": []
+    },
+    {
+      "check": "full_hand_xgb_regression",
+      "ok": true,
+      "recomputed": {
+        "MAE_g/dL": 1.5819,
+        "RMSE_g/dL": 2.0355,
+        "R2": 0.3157,
+        "n_samples": 38,
+        "units": "g/dL"
+      },
+      "mismatches": []
+    },
+    {
+      "check": "eye_rf_classification",
+      "ok": true,
+      "recomputed": {
+        "accuracy": 0.8539,
+        "precision": 0.9,
+        "recall": 0.8,
+        "specificity": 0.9091,
+        "f1_score": 0.8471,
+        "roc_auc": 0.9604,
+        "n_samples": 89
+      },
+      "mismatches": []
+    },
+    {
+      "check": "eye_et_classification",
+      "ok": true,
+      "recomputed": {
+        "accuracy": 0.8876,
+        "precision": 0.9487,
+        "recall": 0.8222,
+        "specificity": 0.9545,
+        "f1_score": 0.881,
+        "roc_auc": 0.9702,
+        "n_samples": 89
+      },
+      "mismatches": []
+    },
+    {
+      "check": "nail_rf_classification",
+      "ok": true,
+      "recomputed": {
+        "accuracy": 0.8349,
+        "precision": 1.0,
+        "recall": 0.0526,
+        "specificity": 1.0,
+        "f1_score": 0.1,
+        "roc_auc": 0.6243,
+        "n_samples": 109
+      },
+      "mismatches": []
+    },
+    {
+      "check": "nail_et_classification",
+      "ok": true,
+      "recomputed": {
+        "accuracy": 0.7798,
+        "precision": 0.2222,
+        "recall": 0.1053,
+        "specificity": 0.9222,
+        "f1_score": 0.1429,
+        "roc_auc": 0.6099,
+        "n_samples": 109
+      },
+      "mismatches": []
+    },
+    {
+      "check": "palm_rf_classification",
+      "ok": true,
+      "recomputed": {
+        "accuracy": 0.7226,
+        "precision": 0.7605,
+        "recall": 0.756,
+        "specificity": 0.6774,
+        "f1_score": 0.7582,
+        "roc_auc": 0.7715,
+        "n_samples": 292
+      },
+      "mismatches": []
+    },
+    {
+      "check": "palm_et_classification",
+      "ok": true,
+      "recomputed": {
+        "accuracy": 0.75,
+        "precision": 0.7844,
+        "recall": 0.7798,
+        "specificity": 0.7097,
+        "f1_score": 0.7821,
+        "roc_auc": 0.7788,
+        "n_samples": 292
+      },
+      "mismatches": []
+    }
+  ],
+  "member3_saved_predictions": [
+    {
+      "check": "M3 CNN (Eye)|regression",
+      "ok": true,
+      "has_image_ids": false,
+      "n_rows": 92,
+      "summary_rows": 1,
+      "recomputed": {
+        "MAE_g/dL": 1.8578,
+        "RMSE_g/dL": 2.423,
+        "R2": 0.2202,
+        "accuracy": null,
+        "f1_score": null,
+        "roc_auc": null,
+        "n_test": 92
+      },
+      "mismatches": []
+    },
+    {
+      "check": "M3 CNN (Nail)|regression",
+      "ok": true,
+      "has_image_ids": false,
+      "n_rows": 109,
+      "summary_rows": 1,
+      "recomputed": {
+        "MAE_g/dL": 2.0916,
+        "RMSE_g/dL": 2.5914,
+        "R2": -0.1917,
+        "accuracy": null,
+        "f1_score": null,
+        "roc_auc": null,
+        "n_test": 109
+      },
+      "mismatches": []
+    },
+    {
+      "check": "M3 CNN (Eye)|classification",
+      "ok": true,
+      "has_image_ids": false,
+      "n_rows": 92,
+      "summary_rows": 1,
+      "recomputed": {
+        "MAE_g/dL": null,
+        "RMSE_g/dL": null,
+        "R2": null,
+        "accuracy": 0.8587,
+        "f1_score": 0.8571,
+        "roc_auc": 0.9381,
+        "n_test": 92
+      },
+      "mismatches": []
+    },
+    {
+      "check": "M3 CNN (Nail)|classification",
+      "ok": true,
+      "has_image_ids": false,
+      "n_rows": 109,
+      "summary_rows": 1,
+      "recomputed": {
+        "MAE_g/dL": null,
+        "RMSE_g/dL": null,
+        "R2": null,
+        "accuracy": 0.8257,
+        "f1_score": 0.0,
+        "roc_auc": 0.5216,
+        "n_test": 109
+      },
+      "mismatches": []
+    },
+    {
+      "check": "M3 CNN (Palm)|classification",
+      "ok": true,
+      "note": "Palm CNN predictions exist (n=667) but are excluded from Member 4 comparison because original splits contain exact duplicates and conflicting labels.",
+      "n_rows": 667,
+      "recomputed_accuracy": 0.5937,
+      "has_image_ids": false
+    }
+  ],
+  "cnn_embedding_experiment": [
+    {
+      "check": "eye_cnn_embedding_xgboost",
+      "ok": true,
+      "issues": [],
+      "split_counts": {
+        "train": 432,
+        "validation": 89,
+        "test": 89
+      },
+      "participants": 202,
+      "paired_n": 89,
+      "cnn": {
+        "MAE_g/dL": 1.7452195071086518,
+        "RMSE_g/dL": 2.2906770586187495,
+        "R2": 0.3152027846987465
+      },
+      "handcrafted": {
+        "MAE_g/dL": 1.4176759494382023,
+        "RMSE_g/dL": 1.974400010850373,
+        "R2": 0.4912498591962502
+      }
+    },
+    {
+      "check": "nail_cnn_embedding_xgboost",
+      "ok": true,
+      "issues": [],
+      "split_counts": {
+        "train": 503,
+        "test": 109,
+        "validation": 107
+      },
+      "participants": 250,
+      "paired_n": 109,
+      "cnn": {
+        "MAE_g/dL": 2.042460767063211,
+        "RMSE_g/dL": 2.6010140351528492,
+        "R2": -0.2006185835826919
+      },
+      "handcrafted": {
+        "MAE_g/dL": 1.7170691009174313,
+        "RMSE_g/dL": 2.307867099038393,
+        "R2": 0.054761806117844425
+      }
+    }
+  ],
+  "full_hand_transfer_experiment": {
+    "check": "full_hand_palm_classifier_transfer_xgboost",
+    "ok": true,
+    "issues": [],
+    "paired_n": 38,
+    "transfer": {
+      "MAE_g/dL": 2.097023361610263,
+      "RMSE_g/dL": 2.616310117787339,
+      "R2": -0.1304953084509175
+    },
+    "handcrafted": {
+      "MAE_g/dL": 1.581858592105263,
+      "RMSE_g/dL": 2.0354729440891957,
+      "R2": 0.3157402553448133,
+      "n_samples": 38
+    }
+  },
+  "fullhand_scratch_cnn_experiment": {
+    "check": "fullhand_scratch_cnn_embedding_xgboost",
+    "ok": true,
+    "issues": [],
+    "split_counts": {
+      "train": 175,
+      "validation": 37,
+      "test": 38
+    },
+    "paired_n": 38,
+    "cnn": {
+      "MAE_g/dL": 1.559870667209474,
+      "RMSE_g/dL": 1.8946331154086802,
+      "R2": 0.40715580642013705
+    },
+    "handcrafted": {
+      "MAE_g/dL": 1.581858592105263,
+      "RMSE_g/dL": 2.0354729440891957,
+      "R2": 0.3157402553448133
+    }
+  },
+  "model_reload": [
+    {
+      "model": "eye_handcrafted_regression.pkl",
+      "ok": true,
+      "n_pred": 5
+    },
+    {
+      "model": "nail_handcrafted_regression.pkl",
+      "ok": true,
+      "n_pred": 5
+    },
+    {
+      "model": "full_hand_handcrafted_regression.pkl",
+      "ok": true,
+      "n_pred": 5
+    },
+    {
+      "model": "eye_xgb_regression.pkl",
+      "ok": true,
+      "n_pred": 5
+    },
+    {
+      "model": "nail_xgb_regression.pkl",
+      "ok": true,
+      "n_pred": 5
+    },
+    {
+      "model": "full_hand_xgb_regression.pkl",
+      "ok": true,
+      "n_pred": 5
+    },
+    {
+      "model": "eye_handcrafted_classification.pkl",
+      "ok": true,
+      "n_pred": 5
+    },
+    {
+      "model": "nail_handcrafted_classification.pkl",
+      "ok": true,
+      "n_pred": 5
+    },
+    {
+      "model": "palm_handcrafted_classification.pkl",
+      "ok": true,
+      "n_pred": 5
+    },
+    {
+      "model": "m3_eye_cnn_embedding_xgb.pkl",
+      "ok": true,
+      "n_pred": 5
+    },
+    {
+      "model": "m3_nail_cnn_embedding_xgb.pkl",
+      "ok": true,
+      "n_pred": 5
+    },
+    {
+      "model": "m3_palm_checkpoint_transfer_fullhand_xgb.pkl",
+      "ok": true,
+      "n_pred": 38,
+      "reproduces_saved_test_predictions": true
+    },
+    {
+      "model": "fullhand_scratch_cnn_embedding_xgb.pkl",
+      "ok": true,
+      "n_pred": 38,
+      "reproduces_saved_test_predictions": true
+    }
+  ],
+  "full_hand_cnn": {
+    "ok": true,
+    "supported": true,
+    "experiment_type": "compact Member 4 CNN regressor trained from scratch on Full-hand training participants; XGBoost fits its learned embeddings",
+    "exploratory": true,
+    "reason": "The archive had no Member 3 Full-hand checkpoint; this separate Full-hand-trained scratch model is small-sample exploratory work and is not equivalent to Member 3's model."
+  },
+  "ok": true,
+  "failure_count": 0
+}
