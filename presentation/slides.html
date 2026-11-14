@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anemia Hb Estimation — Project Presentation</title>
+<style>
+  :root {
+    --primary: #1f4e79;
+    --accent:  #2e86c1;
+    --light:   #d6eaf8;
+    --warn:    #e74c3c;
+    --ok:      #27ae60;
+    --bg:      #f9fbfd;
+    --text:    #1a1a2e;
+    --muted:   #5d6d7e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Inter, Arial, sans-serif;
+    background: #2c3e50;
+    color: var(--text);
+    font-size: 16px;
+  }
+
+  /* ── Navigation ── */
+  #nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(31,78,121,0.96); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 20px; gap: 8px;
+  }
+  #nav span { color: #cce5f7; font-size: 0.82rem; white-space: nowrap; }
+  #nav button {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; border-radius: 4px; padding: 4px 14px; cursor: pointer;
+    font-size: 0.85rem; transition: background 0.2s;
+  }
+  #nav button:hover { background: rgba(255,255,255,0.3); }
+  #slide-counter { color: #a8d4f0; font-size: 0.82rem; min-width: 60px; text-align: center; }
+
+  /* ── Slide container ── */
+  #slides { margin-top: 44px; }
+  .slide {
+    display: none;
+    min-height: calc(100vh - 44px);
+    padding: 48px 60px 40px;
+    background: var(--bg);
+    animation: fadeIn 0.3s ease;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .slide.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ── Typography ── */
+  .slide-title {
+    font-size: 2rem; font-weight: 700; color: var(--primary);
+    border-bottom: 3px solid var(--accent); padding-bottom: 10px;
+    margin-bottom: 24px;
+  }
+  .slide-subtitle { font-size: 1.1rem; color: var(--muted); margin-top: -18px; margin-bottom: 24px; }
+  h3 { font-size: 1.1rem; color: var(--primary); margin: 20px 0 8px; }
+  p  { line-height: 1.65; color: #2c3e50; margin-bottom: 10px; }
+  ul { padding-left: 20px; }
+  li { line-height: 1.65; margin-bottom: 5px; }
+
+  /* ── Layout helpers ── */
+  .cols2  { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .cols3  { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .cols4  { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+
+  /* ── Cards ── */
+  .card {
+    background: white; border: 1px solid #d5e8f4; border-radius: 10px;
+    padding: 18px 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+  .card-title { font-weight: 700; color: var(--primary); font-size: 0.95rem; margin-bottom: 8px; }
+
+  /* ── Metric boxes ── */
+  .metric {
+    background: linear-gradient(135deg, #e8f4fd 0%, #d6eaf8 100%);
+    border: 1px solid #aed6f1; border-radius: 10px;
+    padding: 16px; text-align: center;
+  }
+  .metric .val { font-size: 1.9rem; font-weight: 800; color: var(--primary); }
+  .metric .unit { font-size: 0.8rem; color: var(--accent); font-weight: 600; }
+  .metric .lbl { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+  /* ── Disclaimer box ── */
+  .disclaimer {
+    background: #fef9f0; border-left: 4px solid #e67e22;
+    border-radius: 6px; padding: 14px 18px; font-size: 0.88rem;
+    color: #784212; line-height: 1.6; margin-bottom: 20px;
+  }
+
+  /* ── Tables ── */
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 12px 0; }
+  th { background: var(--primary); color: white; padding: 8px 10px; text-align: left; }
+  td { padding: 7px 10px; border-bottom: 1px solid #e0eaf3; }
+  tr:nth-child(even) td { background: #f4f8fc; }
+  .best { background: #d5f5e3 !important; font-weight: 700; }
+  .warn-row td { color: #922b21; }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 12px;
+    font-size: 0.75rem; font-weight: 600; margin-left: 4px;
+  }
+  .badge-ok   { background: #d5f5e3; color: #1e8449; }
+  .badge-warn { background: #fdebd0; color: #784212; }
+  .badge-err  { background: #fadbd8; color: #922b21; }
+  .badge-blue { background: #d6eaf8; color: #1f4e79; }
+
+  /* ── Title slide ── */
+  .title-slide {
+    background: linear-gradient(145deg, #1a3a5c 0%, #1f4e79 50%, #2e86c1 100%);
+    color: white; display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    padding: 60px 72px;
+  }
+  .title-slide .main-title { font-size: 2.5rem; font-weight: 800; line-height: 1.25; color: white; border: none; }
+  .title-slide .sub { font-size: 1.1rem; color: #a8d4f0; margin-top: 16px; line-height: 1.7; }
+  .title-slide .pills { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+  .title-slide .pill {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    padding: 6px 16px; border-radius: 20px; font-size: 0.88rem; color: #cce5f7;
+  }
+  .title-slide .disclaimer-banner {
+    background: rgba(231,76,60,0.25); border: 1px solid rgba(231,76,60,0.6);
+    border-radius: 6px; padding: 10px 16px; margin-top: 32px;
+    font-size: 0.88rem; color: #f9ebea; max-width: 700px;
+  }
+
+  /* ── Progress bar ── */
+  #progress { position: fixed; bottom: 0; left: 0; height: 3px; background: var(--accent); transition: width 0.3s; }
+
+  /* ── Keyboard hint ── */
+  .key-hint { font-size: 0.75rem; color: var(--muted); text-align: center; margin-top: 16px; }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<div id="nav">
+  <span>🔬 Hemoglobin Estimation — Capstone Presentation</span>
+  <div style="display:flex; gap:8px; align-items:center;">
+    <button onclick="prevSlide()">← Prev</button>
+    <span id="slide-counter">1 / 14</span>
+    <button onclick="nextSlide()">Next →</button>
+  </div>
+  <span style="font-size:0.75rem; color:#a8d4f0;">Press ← → or click buttons</span>
+</div>
+
+<div id="slides">
+
+<!-- ════════════════════════════════════════════════════════════
+     SLIDE 1 — Title
+════════════════════════════════════════════════════════════ -->
+<div class="slide title-slide active" id="slide-1">
+  <div>
+    <div class="main-title">Hybrid AI-Based Non-Invasive<br>Hemoglobin Estimation</div>
+    <div class="sub">
+      A Feasibility Study Using Image-Derived Features<br>
+      Third-Year Engineering Capstone · Five-Member Team
+    </div>
+    <div class="pills">
+      <span class="pill">Python 3.10</span>
+      <span class="pill">XGBoost</span>
+      <span class="pill">PyTorch</span>
+      <span class="pill">SHAP</span>
+      <span class="pill">Streamlit</span>
+      <span class="pill">3 Datasets · 9 Models</span>
+    </div>
+    <div class="disclaimer-banner">
+      🚨 Academic research prototype only — not a diagnostic tool.
+      Must not replace laboratory CBC testing or medical advice.
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SLIDE 2 — Problem Statement
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-2">
+  <div class="slide-title">Problem Statement</div>
+  <div class="cols2">
+    <div>
+      <h3>The Clinical Challenge</h3>
+      <ul>
+        <li>Anemia affects ~1.6 billion people globally</li>
+        <li>Standard diagnosis requires venous blood draw + CBC analyzer</li>
+        <li>Invasive, requires equipment, trained staff, lab access</li>
+        <li>Peripheral pallor (conjunctiva, nails, palm) is a classic clinical sign</li>
+      </ul>
+      <h3>Research Question</h3>
+      <p>Can consumer-grade RGB photographs of peripheral anatomical sites
+      estimate hemoglobin concentration (g/dL) using machine learning,
+      under rigorous participant-level data partitioning?</p>
+    </div>
+    <div>
+      <h3>Common Pitfalls We Address</h3>
+      <div class="card" style="margin-bottom:10px;">
+        <div class="card-title">❌ Image-level data leakage</div>
+        <p style="font-size:0.88rem;">Splitting augmented images randomly inflates accuracy via subject memorisation.
+        We use <strong>strict participant-level splits</strong>.</p>
+      </div>
+      <div class="card" style="margin-bottom:10px;">
+        <div class="card-title">❌ Label conflation</div>
+        <p style="font-size:0.88rem;">Treating folder labels as measured Hb.
+        We separate numerical Hb regression from folder-label classification.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">❌ No interpretability</div>
+        <p style="font-size:0.88rem;">Black-box predictions without attribution.
+        We provide TreeSHAP on interpretable handcrafted features.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SLIDE 3 — Datasets
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-3">
+  <div class="slide-title">Datasets</div>
+  <table>
+    <tr>
+      <th>Dataset</th><th>View</th><th>Participants</th>
+      <th>Images (after dedup)</th><th>Hb Target</th><th>Split (Train/Val/Test)</th>
+    </tr>
+    <tr>
+      <td><strong>EDI Eye</strong><br><span style="font-size:0.8rem;color:#666">Dimauro et al. — India &amp; Italy</span></td>
+      <td>Palpebral conjunctiva</td><td>202</td>
+      <td>610 (from 756; 146 dupes removed)</td>
+      <td>Numerical Hb g/dL <span class="badge badge-ok">lab-measured</span></td>
+      <td>432 / 89 / 89 images<br>141 / 30 / 31 participants</td>
+    </tr>
+    <tr>
+      <td><strong>Figshare Nail/Skin</strong><br><span style="font-size:0.8rem;color:#666">Hand + Nail crops</span></td>
+      <td>Full-hand + Nail beds</td><td>250</td>
+      <td>250 full-hand + 719 nail crops</td>
+      <td>Numerical Hb g/dL (÷10 from g/L) <span class="badge badge-ok">lab-measured</span></td>
+      <td>175 / 37 / 38 participants</td>
+    </tr>
+    <tr class="warn-row">
+      <td><strong>Mendeley Palm</strong><br><span style="font-size:0.8rem;color:#666">Ghana paediatric cohort</span></td>
+      <td>Palmar hand</td><td>526 groups</td>
+      <td>2,104 (from 4,261; heavily augmented)</td>
+      <td>Folder label only <span class="badge badge-warn">no measured Hb</span></td>
+      <td>1,452 / 312 / 292 images<br>363 / 78 / 73 groups</td>
+    </tr>
+  </table>
+  <div class="disclaimer" style="margin-top:16px;">
+    <strong>Licensing:</strong> Formal upstream redistribution terms for all three datasets are
+    <strong>pending verification</strong> against original publisher records.
+    Raw participant photographs must not be redistributed externally before licence confirmation.
+  </div>
+  <div class="cols2" style="margin-top:8px;">
+    <div class="card">
+      <div class="card-title">Key deduplication finding</div>
+      <ul style="font-size:0.88rem;">
+        <li>Eye: 146 exact-content duplicates across variant path names removed</li>
+        <li>Palm: 2,157 exact + 4 near-duplicates (SSIM ≥ 0.987) excluded from test set</li>
+        <li>Figshare: 1 corrupted 0-byte nail file excluded (0236_nail_1.jpg)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Figshare pairing fact</div>
+      <p style="font-size:0.88rem;">
+        Full-hand (<code>full/&lt;id&gt;_full.jpg</code>) and Nail crops (<code>nail/&lt;id&gt;_nail_k.jpg</code>)
+        are both extracted from the <strong>same source photograph</strong> (<code>photo/&lt;id&gt;.jpg</code>).
+        They are paired views, not independent clinical sensors.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SLIDE 4 — Methodology
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-4">
+  <div class="slide-title">Methodology</div>
+  <div class="cols2">
+    <div>
+      <h3>130-D Handcrafted Feature Vector</h3>
+      <table>
+        <tr><th>Group</th><th>Count</th><th>Examples</th></tr>
+        <tr><td>Multi-space channel moments</td><td>72</td><td>RGB/HSV/LAB/YCrCb mean, std, skew, p10/50/90</td></tr>
+        <tr><td>Redness / pallor / erythema</td><td>9</td><td>R/G ratio, erythema index, pallor index</td></tr>
+        <tr><td>RGB intensity histograms</td><td>24</td><td>8 bins × 3 channels</td></tr>
+        <tr><td>CIE LAB chromaticity histograms</td><td>16</td><td>8 bins × a* and b* axes</td></tr>
+        <tr><td>Center-to-border spatial contrast</td><td>3</td><td>center_R_diff, center_A_diff</td></tr>
+        <tr><td>GLCM texture descriptors</td><td>6</td><td>contrast, homogeneity, energy, correlation</td></tr>
+        <tr><th>Total</th><th>130</th><th></th></tr>
+      </table>
+
+      <h3 style="margin-top:16px;">Preprocessing</h3>
+      <ul style="font-size:0.9rem;">
+        <li>RGB convert → resize to 224×224 (bilinear)</li>
+        <li>Central 70% ROI crop ([33:190, 33:190]) to reduce background</li>
+        <li>No data augmentation at inference</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Leakage-Free Split Strategy</h3>
+      <div class="card" style="margin-bottom:10px;">
+        <p style="font-size:0.88rem;">
+          All splits are <strong>participant-level</strong> (grouped stratified, seed=42,
+          70%/15%/15%). Images from the same person never cross train/val/test.
+          Cross-split participant leakage = <strong>0</strong>.
+        </p>
+      </div>
+
+      <h3>XGBoost Regression Pipeline</h3>
+      <ul style="font-size:0.9rem;">
+        <li>SimpleImputer (median) → StandardScaler → XGBRegressor</li>
+        <li>Imputer and scaler fitted on <em>training split only</em></li>
+        <li>Hyperparameter grid tuned on <em>validation split</em> (min MAE)</li>
+        <li>Test split evaluated <em>once</em> after all tuning complete</li>
+      </ul>
+
+      <h3>CNN Experiments</h3>
+      <ul style="font-size:0.9rem;">
+        <li><strong>M3 DenseNet-121 1024-D:</strong> Member 3 pretrained checkpoints (Eye, Nail)</li>
+        <li><strong>Scratch-CNN 64-D:</strong> Member 4 compact 4-block CNN trained from scratch
+        on 175 Full-hand participants; Smooth L1 loss, AdamW, cosine annealing</li>
+        <li>Both feed XGBRegressor on same participant-level splits</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SLIDE 5 — Hb Regression Results
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-5">
+  <div class="slide-title">Hemoglobin Regression Results</div>
+  <div class="slide-subtitle">Verified on held-out test participants — not used for any tuning</div>
+
+  <table>
+    <tr>
+      <th>Model</th><th>View</th><th>Test n</th>
+      <th>MAE (g/dL) ↓</th><th>RMSE (g/dL) ↓</th><th>R² ↑</th>
+    </tr>
+    <tr class="best">
+      <td>Handcrafted XGBoost</td><td>Eye</td><td>89 imgs / 31 pts</td>
+      <td><strong>1.4177</strong></td><td><strong>1.9744</strong></td><td><strong>0.4912</strong></td>
+    </tr>
+    <tr>
+      <td>M3 DenseNet-121 1024-D XGBoost</td><td>Eye</td><td>89 imgs / 31 pts</td>
+      <td>1.7452</td><td>2.2907</td><td>0.3152</td>
+    </tr>
+    <tr class="best">
+      <td>Scratch-CNN 64-D + XGBoost</td><td>Full-hand</td><td>38 participants</td>
+      <td><strong>1.5599</strong></td><td><strong>1.8946</strong></td><td><strong>0.4072</strong></td>
+    </tr>
+    <tr>
+      <td>Handcrafted XGBoost</td><td>Full-hand</td><td>38 participants</td>
+      <td>1.5819</td><td>2.0355</td><td>0.3157</td>
+    </tr>
+    <tr>
+      <td>Handcrafted XGBoost (crop-level)</td><td>Nail</td><td>109 crops / 38 pts</td>
+      <td>1.7171</td><td>2.3079</td><td>0.0548</td>
+    </tr>
+    <tr class="warn-row">
+      <td>M3 DenseNet-121 1024-D XGBoost</td><td>Nail</td><td>109 crops / 38 pts</td>
+      <td>2.0425</td><td>2.6010</td><td>−0.2006</td>
+    </tr>
+    <tr class="warn-row">
+      <td>Palm-checkpoint transfer XGBoost</td><td>Full-hand</td><td>38 participants</td>
+      <td>2.0970</td><td>2.6163</td><td>−0.1305</td>
+    </tr>
+  </table>
+
+  <div class="cols3" style="margin-top:20px;">
+    <div class="metric"><div class="val">1.42</div><div class="unit">g/dL MAE</div><div class="lbl">Eye — best model (n=31 pts)</div></div>
+    <div class="metric"><div class="val">1.56</div><div class="unit">g/dL MAE</div><div class="lbl">Full-hand — best model (n=38 pts)</div></div>
+    <div class="metric"><div class="val">0.49</div><div class="unit">R²</div><div class="lbl">Eye — best R² achieved</div></div>
+  </div>
+
+  <p style="margin-top:16px; font-size:0.9rem; color:#666;">
+    <strong>Key insight:</strong> 130-D handcrafted features outperform 1024-D pretrained CNN embeddings on both Eye and Nail —
+    high-dimensional classification embeddings overfit on small cohorts (N<sub>train</sub> = 141–175).
+    Scratch-CNN trained directly for Hb regression is competitive with handcrafted features on Full-hand.
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SLIDE 6 — Fusion Results
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-6">
+  <div class="slide-title">Paired Multi-View Fusion</div>
+  <div class="cols2">
+    <div>
+      <h3>Pairing Audit (Member 5)</h3>
+      <ul>
+        <li>250/250 Figshare participants matched across Full-hand and Nail views</li>
+        <li>0 Hb mismatches · 0 split mismatches · 0 source-image mismatches</li>
+        <li>Both views originate from the same <code>photo/&lt;id&gt;.jpg</code></li>
+        <li>Nail crops per participant: 1 to 3 (mean = 2.88)</li>
+      </ul>
+
+      <h3 style="margin-top:16px;">Fusion Methodology</h3>
+      <ul style="font-size:0.9rem;">
+        <li>Aggregate nail crops → participant mean (deterministic)</li>
+        <li>Concatenate Full-hand 130-D + mean Nail 130-D = <strong>260-D</strong></li>
+        <li>Tune XGBoost on 37 validation participants</li>
+        <li>Evaluate once on 38 held-out test participants</li>
+        <li>Imputer + scaler fitted on 175 training participants only</li>
+      </ul>
+
+      <h3 style="margin-top:16px;">Winning configuration</h3>
+      <p style="font-size:0.88rem;">
+        n_estimators=100, max_depth=3, learning_rate=0.03, subsample=0.7,
+        colsample_bytree=0.6, reg_alpha=1.0, reg_lambda=5.0
+      </p>
+    </div>
+    <div>
+      <h3>Fusion vs. Single-View (n=38 test participants)</h3>
+      <table>
+        <tr><th>Model</th><th>MAE (g/dL) ↓</th><th>R²</th></tr>
+        <tr><td>Full-hand Handcrafted XGBoost</td><td><strong>1.5819</strong></td><td>0.3157</td></tr>
+        <tr class="best"><td>Fused 260-D XGBoost</td><td>1.6792</td><td>0.1759</td></tr>
+        <tr><td>Nail-only (participant mean)</td><td>1.8289</td><td>0.0394</td></tr>
+      </table>
+
+      <div class="card" style="margin-top:16px; border-left:4px solid #e67e22;">
+        <div class="card-title">⚠ Honest finding</div>
+        <p style="font-size:0.88rem;">
+          Fusion <strong>improves over Nail-only</strong> (Δ MAE = −0.15 g/dL) but
+          <strong>does not beat Full-hand-only</strong>.
+          Because both views come from the same photograph, doubling dimensionality
+          (130→260) on only 175 training participants dilutes XGBoost split selection
+          without adding an independent sensor view.
+        </p>
+      </div>
+
+      <div class="card" style="margin-top:12px; background:#fdf9f0; border-left:4px solid #f39c12;">
+        <div class="card-title">Not true multimodal fusion</div>
+        <p style="font-size:0.88rem;">
+          Cross-dataset fusion (Eye + Nail from different studies) is scientifically invalid —
+          no shared participants exist across the three datasets.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SLIDE 7 — Classification Results
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-7">
+  <div class="slide-title">Exploratory Classification Results</div>
+  <div class="disclaimer">
+    All classification experiments use threshold-derived or folder-derived labels —
+    <strong>not clinically validated anemia diagnosis</strong>.
+    WHO 2024 anemia thresholds require sex, age, and pregnancy context not available in these datasets.
+  </div>
+
+  <table>
+    <tr>
+      <th>Dataset</th><th>Label Source</th><th>Model</th>
+      <th>Test n</th><th>Accuracy</th><th>Sensitivity</th><th>Specificity</th><th>F1</th><th>ROC-AUC</th>
+    </tr>
+    <tr class="best">
+      <td>Eye</td><td>Sex-adj. Hb cutoffs (M &lt;13 / F &lt;12 g/dL)</td>
+      <td>ExtraTrees</td><td>89</td>
+      <td>0.8876</td><td>0.8222</td><td>0.9545</td><td>0.8810</td><td>0.9702</td>
+    </tr>
+    <tr>
+      <td>Eye</td><td>Sex-adj. Hb cutoffs</td>
+      <td>RandomForest</td><td>89</td>
+      <td>0.8539</td><td>0.8222</td><td>0.8864</td><td>0.8471</td><td>0.9604</td>
+    </tr>
+    <tr class="warn-row">
+      <td>Nail</td><td>Universal &lt;11 g/dL (83% non-anemic)</td>
+      <td>ExtraTrees</td><td>109 crops</td>
+      <td>0.7798</td><td><strong>0.1053</strong></td><td>0.9222</td><td><strong>0.1429</strong></td><td>0.6099</td>
+    </tr>
+    <tr>
+      <td>Palm</td><td>Folder label only (no Hb)</td>
+      <td>ExtraTrees</td><td>292</td>
+      <td>0.7500</td><td>0.7798</td><td>0.7097</td><td>0.7821</td><td>0.7788</td>
+    </tr>
+  </table>
+
+  <div class="cols2" style="margin-top:16px;">
+    <div class="card">
+      <div class="card-title">Eye classification caveat</div>
+      <ul style="font-size:0.88rem;">
+        <li>Labels use sex-specific cutoffs only (Male &lt;13, Female &lt;12 g/dL)</li>
+        <li>Cohort includes 19 participants aged &gt;65 — WHO 2024 applies different thresholds</li>
+        <li>No pregnancy, altitude, or smoking adjustments</li>
+        <li>Treat as lab-Hb-derived exploratory threshold screening</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Nail classification caveat</div>
+      <ul style="font-size:0.88rem;">
+        <li>Universal 11 g/dL cutoff — no sex/age context</li>
+        <li>Severe class imbalance: only 17.4% positive (19/109 crops)</li>
+        <li>High specificity (92%) masks very low sensitivity (10.5%)</li>
+        <li>Classifier is essentially predicting the majority class</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SLIDE 8 — SHAP Explainability
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-8">
+  <div class="slide-title">SHAP Explainability — Full-hand Handcrafted XGBoost</div>
+  <div class="cols2">
+    <div>
+      <h3>What we computed</h3>
+      <ul>
+        <li>TreeSHAP (<code>shap.TreeExplainer</code>) on <code>full_hand_xgb_regression.pkl</code></li>
+        <li>Background: 175 training participants</li>
+        <li>Evaluated on 38 held-out test participants (no test-set tuning)</li>
+        <li>XGBoost 3.2.0 compatibility fix: bracketed base_score string normalised in-memory</li>
+      </ul>
+
+      <h3 style="margin-top:16px;">Top 10 features by mean |SHAP| (g/dL)</h3>
+      <table>
+        <tr><th>#</th><th>Feature</th><th>Mean |SHAP|</th></tr>
+        <tr><td>1</td><td>HSV_H_p10</td><td>0.4466</td></tr>
+        <tr><td>2</td><td>G_hist_5</td><td>0.3994</td></tr>
+        <tr><td>3</td><td>B_hist_10</td><td>0.3542</td></tr>
+        <tr><td>4</td><td>G_hist_6</td><td>0.2765</td></tr>
+        <tr><td>5</td><td>G_std</td><td>0.2246</td></tr>
+        <tr><td>6</td><td>B_hist_5</td><td>0.1558</td></tr>
+        <tr><td>7</td><td>HSV_S_p50</td><td>0.1235</td></tr>
+        <tr><td>8</td><td>LAB_B_hist_4</td><td>0.1059</td></tr>
+        <tr><td>9</td><td>G_hist_3</td><td>0.0977</td></tr>
+        <tr><td>10</td><td>HSV_H_skew</td><td>0.0772</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Interpretation</h3>
+      <div class="card" style="margin-bottom:12px;">
+        <div class="card-title">Why green-channel features rank highest?</div>
+        <p style="font-size:0.88rem;">
+          Hemoglobin has strong absorption bands at ~415 nm (Soret) and ~540–580 nm
+          (oxyhemoglobin Q-bands). Green light (~530–560 nm) is therefore most sensitive
+          to subcutaneous blood concentration — consistent with G_hist features dominating.
+        </p>
+      </div>
+      <div class="card" style="margin-bottom:12px;">
+        <div class="card-title">Why HSV Hue percentiles?</div>
+        <p style="font-size:0.88rem;">
+          HSV_H_p10 (10th-percentile hue) captures the reddest areas of the hand ROI,
+          corresponding to vascular regions visible through the skin.
+        </p>
+      </div>
+      <div class="card" style="border-left:4px solid #e74c3c;">
+        <div class="card-title">⚠ Important boundary</div>
+        <p style="font-size:0.88rem;">
+          SHAP values reflect statistical associations in the training data —
+          <strong>not causal physiological mechanisms</strong>.
+          They should not be described as clinical evidence.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SLIDE 9 — System Architecture
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-9">
+  <div class="slide-title">System Architecture</div>
+  <div class="cols2">
+    <div>
+      <h3>Pipeline Overview</h3>
+      <div style="font-family:monospace; font-size:0.82rem; background:#f4f8fc; border:1px solid #c5d9ea; border-radius:8px; padding:14px; line-height:1.7;">
+        Input Image<br>
+        &emsp;↓<br>
+        <strong>Engineering Quality Gate</strong> (10 checks)<br>
+        &emsp;readability · resolution · brightness · contrast · blur · saturation<br>
+        &emsp;↓<br>
+        <strong>Feature / Embedding Extraction</strong><br>
+        &emsp;├─ 130-D Handcrafted (RGB/HSV/LAB/GLCM)<br>
+        &emsp;├─ 64-D Scratch-CNN (Full-hand only)<br>
+        &emsp;└─ 1024-D M3 DenseNet-121 (Eye / Nail)<br>
+        &emsp;↓<br>
+        <strong>Leakage-Free ML Models</strong><br>
+        &emsp;├─ XGBRegressor (Hb estimation, g/dL)<br>
+        &emsp;├─ ExtraTrees / RF Classifier (exploratory screening)<br>
+        &emsp;└─ TreeSHAP (feature attribution)<br>
+        &emsp;↓<br>
+        <strong>ModelAdapter layer</strong> (typed dict output)<br>
+        &emsp;↓<br>
+        <strong>Streamlit Research Prototype</strong>
+      </div>
+    </div>
+    <div>
+      <h3>Saved Model Inventory</h3>
+      <table style="font-size:0.82rem;">
+        <tr><th>Model File</th><th>View</th><th>Type</th></tr>
+        <tr><td>eye_xgb_regression.pkl</td><td>Eye</td><td>XGB Reg</td></tr>
+        <tr><td>eye_handcrafted_regression.pkl</td><td>Eye</td><td>ET Reg</td></tr>
+        <tr><td>eye_handcrafted_classification.pkl</td><td>Eye</td><td>ET Cls</td></tr>
+        <tr><td>nail_xgb_regression.pkl</td><td>Nail</td><td>XGB Reg</td></tr>
+        <tr><td>nail_handcrafted_regression.pkl</td><td>Nail</td><td>ET Reg</td></tr>
+        <tr><td>nail_handcrafted_classification.pkl</td><td>Nail</td><td>ET Cls</td></tr>
+        <tr><td>full_hand_xgb_regression.pkl</td><td>Full-hand</td><td>XGB Reg</td></tr>
+        <tr><td>full_hand_handcrafted_regression.pkl</td><td>Full-hand</td><td>ET Reg</td></tr>
+        <tr><td>palm_handcrafted_classification.pkl</td><td>Palm</td><td>ET Cls</td></tr>
+        <tr><td>m3_eye_cnn_embedding_xgb.pkl</td><td>Eye</td><td>CNN-XGB</td></tr>
+        <tr><td>m3_nail_cnn_embedding_xgb.pkl</td><td>Nail</td><td>CNN-XGB</td></tr>
+        <tr><td>fullhand_scratch_cnn_embedding_xgb.pkl</td><td>Full-hand</td><td>CNN-XGB</td></tr>
+        <tr><td>fused_model.pkl</td><td>Fused</td><td>260-D XGB</td></tr>
+      </table>
+      <p style="font-size:0.8rem; color:#666; margin-top:6px;">13 models · All validated (13/13 reload checks passing)</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SLIDE 10 — Streamlit Demo
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-10">
+  <div class="slide-title">Streamlit Research Prototype</div>
+  <div class="cols2">
+    <div>
+      <h3>What the app does</h3>
+      <ul>
+        <li>Loads all 13 models once at startup (<code>@st.cache_resource</code>)</li>
+        <li><strong>Never retrains</strong> — read-only artifact consumption</li>
+        <li>Runs 10-point engineering image quality check before any inference</li>
+        <li>Handles missing, empty, corrupted, and wrong-format uploads gracefully</li>
+        <li>Displays academic disclaimer prominently on every page</li>
+      </ul>
+
+      <h3 style="margin-top:16px;">Four tabs</h3>
+      <div class="card" style="margin-bottom:8px;">
+        <div class="card-title">🧪 Demo — Upload &amp; Predict</div>
+        <p style="font-size:0.85rem;">Upload image → quality check → Hb estimate or screening score</p>
+      </div>
+      <div class="card" style="margin-bottom:8px;">
+        <div class="card-title">📊 Benchmark Results</div>
+        <p style="font-size:0.85rem;">Full regression + classification metrics tables loaded from saved CSVs</p>
+      </div>
+      <div class="card" style="margin-bottom:8px;">
+        <div class="card-title">🔍 SHAP Explainability</div>
+        <p style="font-size:0.85rem;">Global and local TreeSHAP plots + feature attribution table</p>
+      </div>
+      <div class="card">
+        <div class="card-title">ℹ Project Info &amp; Limitations</div>
+        <p style="font-size:0.85rem;">Architecture, team roles, 10 limitations, datasets, run commands</p>
+      </div>
+    </div>
+    <div>
+      <h3>Launch command</h3>
+      <div style="font-family:monospace; font-size:0.88rem; background:#1e2a38; color:#a8d8ea; border-radius:8px; padding:16px; line-height:1.8;">
+        # From Anemia_ML_Project/<br>
+        py -3.10 -m streamlit run member5_integration\app.py
+      </div>
+      <p style="margin-top:10px; font-size:0.88rem;">Opens at <strong>http://localhost:8501</strong></p>
+
+      <h3 style="margin-top:16px;">Scientific guardrails in the UI</h3>
+      <ul style="font-size:0.9rem;">
+        <li>Palm excluded from Hb estimation — UI enforces this</li>
+        <li>Fusion mode shows paired-view pairing requirement before upload</li>
+        <li>Classifier output labelled "exploratory" with threshold caveat</li>
+        <li>Screening score explicitly labelled as uncalibrated tree-vote fraction</li>
+        <li>All Hb predictions clamped to [3.0, 20.0] g/dL physiological range</li>
+        <li>Model provenance (training cohort, test metrics) visible per prediction</li>
+      </ul>
+
+      <h3 style="margin-top:16px;">Test coverage</h3>
+      <div class="metric" style="display:inline-block; padding:10px 24px; margin-right:12px;">
+        <div class="val" style="font-size:1.5rem;">31</div>
+        <div class="lbl">pytest checks passing</div>
+      </div>
+      <div class="metric" style="display:inline-block; padding:10px 24px;">
+        <div class="val" style="font-size:1.5rem;">0</div>
+        <div class="lbl">failures</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SLIDE 11 — Limitations
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-11">
+  <div class="slide-title">Limitations &amp; Honest Caveats</div>
+  <div class="cols2">
+    <div>
+      <h3>Statistical &amp; Data Limitations</h3>
+      <ul>
+        <li><strong>Small test cohorts:</strong> 31 Eye participants, 38 Figshare participants.
+        Differences &lt;0.15 g/dL MAE are within sampling uncertainty.</li>
+        <li><strong>Same-photograph pairing:</strong> Figshare Full-hand + Nail are not
+        independent sensors — they're both cropped from one photograph.</li>
+        <li><strong>No cross-dataset fusion:</strong> Eye, Figshare, and Palm cohorts have
+        no shared participants; combining them is scientifically invalid.</li>
+        <li><strong>Severe nail class imbalance:</strong> 17% positive rate → 10.5% sensitivity
+        despite 78% accuracy.</li>
+        <li><strong>Palm — folder labels only:</strong> No measured Hb exists in the local archive.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Technical &amp; Operational Limitations</h3>
+      <ul>
+        <li><strong>Incomplete demographics:</strong> Figshare lacks sex/age metadata.
+        Eye cohort has 19 participants &gt;65; pregnancy/altitude records absent.
+        All thresholds are exploratory proxies.</li>
+        <li><strong>Opaque CNN dimensions:</strong> 64-D Scratch-CNN and 1024-D M3
+        embedding coordinates have no direct biological meaning.</li>
+        <li><strong>RGB physics limits:</strong> Ambient lighting, sensor white balance,
+        and skin tone variation bound achievable R² (0.31–0.49 on best modalities).</li>
+        <li><strong>No external clinical validation:</strong> No prospective clinical trial,
+        multi-centre study, or regulatory review.</li>
+        <li><strong>Dataset licensing pending:</strong> Formal redistribution terms for
+        all three datasets require upstream publisher confirmation.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="disclaimer" style="margin-top:16px;">
+    <strong>Bottom line:</strong> This is a rigorous academic feasibility study demonstrating
+    that image-based Hb estimation is <em>technically possible</em> with handcrafted features
+    and XGBoost. It is <strong>not</strong> ready for clinical deployment.
+    Test errors of MAE ≈ 1.42–1.83 g/dL are substantial relative to clinical decision thresholds
+    (~1–2 g/dL between WHO anemia severity categories).
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SLIDE 12 — Team Contributions
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-12">
+  <div class="slide-title">Team Contributions</div>
+  <div class="cols2">
+    <div>
+      <table>
+        <tr><th>Member</th><th>Role</th><th>Key Deliverables</th></tr>
+        <tr>
+          <td><strong>Member 1</strong></td>
+          <td>Dataset &amp; Data Audit Lead</td>
+          <td>Dataset sourcing, ZIP extraction, MD5 deduplication, Hb unit verification,
+          split manifests, license status documentation</td>
+        </tr>
+        <tr>
+          <td><strong>Member 2</strong></td>
+          <td>Image Preprocessing &amp; Quality</td>
+          <td>ROI cropping, 224×224 resizing, RGB normalisation,
+          preprocessing pipeline in feature_extraction.py</td>
+        </tr>
+        <tr>
+          <td><strong>Member 3</strong></td>
+          <td>Deep Learning Feature Extraction</td>
+          <td>LightweightCNN / DenseNet-121 checkpoints for Eye, Nail, Palm;
+          1024-D embedding extraction scripts</td>
+        </tr>
+        <tr>
+          <td><strong>Member 4</strong></td>
+          <td>ML Modelling &amp; Evaluation</td>
+          <td>130-D handcrafted features, XGBoost/RF/ET regression &amp; classification,
+          Full-hand Scratch-CNN, duplicate audits, Run_Project.bat, HTML dashboard</td>
+        </tr>
+        <tr>
+          <td><strong>Member 5</strong></td>
+          <td>Fusion, Explainability &amp; Demo</td>
+          <td>Pairing audit, 260-D fusion, TreeSHAP, ModelAdapter layer,
+          image quality gate, Streamlit app, 31 pytest checks, final report</td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <h3>What we built together</h3>
+      <div class="cols2" style="gap:10px;">
+        <div class="metric"><div class="val">3</div><div class="lbl">Datasets audited</div></div>
+        <div class="metric"><div class="val">13</div><div class="lbl">Trained models saved</div></div>
+        <div class="metric"><div class="val">130</div><div class="lbl">Handcrafted features</div></div>
+        <div class="metric"><div class="val">260</div><div class="lbl">Fusion dimensions</div></div>
+        <div class="metric"><div class="val">31</div><div class="lbl">Automated tests</div></div>
+        <div class="metric"><div class="val">0</div><div class="lbl">Participant leakage</div></div>
+      </div>
+      <div class="card" style="margin-top:16px; border-left:4px solid #f39c12;">
+        <div class="card-title">Contribution note</div>
+        <p style="font-size:0.85rem;">
+          Individual sub-task contributions within each member role are documented
+          in <code>final_report.md</code> Section 25. Items marked ⚠ require
+          team confirmation where artifact-level evidence is not directly verifiable.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SLIDE 13 — Future Work
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-13">
+  <div class="slide-title">Future Work</div>
+  <div class="cols3">
+    <div class="card">
+      <div class="card-title">📷 Illumination Calibration</div>
+      <p style="font-size:0.88rem;">Include a physical colorimetric reference card
+      in the camera frame to normalise ambient lighting and sensor white-balance
+      before feature extraction.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">👥 Larger Validation Cohorts</div>
+      <p style="font-size:0.88rem;">Increase held-out test cohorts beyond 31–38 participants.
+      At n=38, confidence intervals on MAE differences are ≥0.3 g/dL — only larger
+      samples can establish statistical significance.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🏥 Prospective Clinical Study</div>
+      <p style="font-size:0.88rem;">Co-collect standardised photographs and laboratory
+      CBC Hb on the same day, in controlled lighting, across diverse demographics
+      including elderly, pregnant, and high-altitude participants.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🌐 Cross-Dataset Linkage</div>
+      <p style="font-size:0.88rem;">Design a future study that photographs the same
+      participant's Eye, Nail, and Palm in a single session, enabling genuine
+      multimodal fusion across independent anatomical sites.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">🔬 Pretrained Regression CNNs</div>
+      <p style="font-size:0.88rem;">Train EfficientNet-B0 or MobileNetV3 with frozen
+      ImageNet features and a regression head on a larger labelled Hb dataset,
+      with colour-calibrated preprocessing.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 WHO-Stratified Thresholds</div>
+      <p style="font-size:0.88rem;">Collect full demographic records (sex, age, pregnancy
+      status) to apply WHO 2024 sex- and condition-specific anemia thresholds and
+      enable proper classification evaluation.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     SLIDE 14 — Summary
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="slide-14">
+  <div class="slide-title">Summary</div>
+  <div class="cols2">
+    <div>
+      <h3>What we demonstrated</h3>
+      <ul>
+        <li>Image-based Hb estimation <em>is feasible</em> using RGB features —
+        MAE of 1.42 g/dL (Eye) and 1.56 g/dL (Full-hand) under strict participant-level splits</li>
+        <li>130-D handcrafted features outperform 1024-D pretrained CNN embeddings
+        on small cohorts — simpler, more interpretable, and more reliable</li>
+        <li>Compact task-specific Scratch-CNN (64-D) is competitive with handcrafted
+        on Full-hand and benefits from SHAP opacity trade-off analysis</li>
+        <li>Fusion improves over Nail-only but cannot beat Full-hand-only — both
+        views originate from the same photograph</li>
+        <li>Participant-level leakage prevention is critical — image-level splits
+        would have inflated metrics significantly</li>
+        <li>31/31 automated tests passing; 13/13 model artifacts validated</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Honest boundaries</h3>
+      <div class="disclaimer">
+        Test errors of MAE ≈ 1.42–1.83 g/dL and RMSE ≈ 1.89–2.41 g/dL are substantial
+        relative to clinical decision thresholds. This is a third-year academic
+        feasibility study. <strong>It is not a deployable clinical device.</strong>
+      </div>
+
+      <h3 style="margin-top:16px;">Run the demo</h3>
+      <div style="font-family:monospace; font-size:0.88rem; background:#1e2a38; color:#a8d8ea; border-radius:8px; padding:14px; line-height:1.9;">
+        # Install<br>
+        py -3.10 -m pip install -r member5_integration\requirements.txt<br><br>
+        # Validate artifacts<br>
+        py -3.10 member4_ml_modelling\src\validate_member4_results.py<br><br>
+        # Launch<br>
+        py -3.10 -m streamlit run member5_integration\app.py
+      </div>
+      <p style="margin-top:8px; font-size:0.88rem; color:#666;">
+        Opens at <strong>http://localhost:8501</strong>
+      </p>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:28px; padding:16px;
+              background:linear-gradient(135deg,#1f4e79,#2e86c1);
+              border-radius:10px; color:white;">
+    <strong style="font-size:1.1rem;">Thank you</strong><br>
+    <span style="font-size:0.9rem; color:#a8d4f0;">
+      Hybrid AI-Based Non-Invasive Hemoglobin Estimation: A Feasibility Study Using Image-Derived Features<br>
+      Third-Year Engineering Capstone · Academic Research Prototype Only
+    </span>
+  </div>
+</div>
+
+</div><!-- /slides -->
+
+<div id="progress"></div>
+
+<script>
+  const TOTAL = 14;
+  let current = 1;
+
+  function showSlide(n) {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    document.getElementById('slide-' + n).classList.add('active');
+    document.getElementById('slide-counter').textContent = n + ' / ' + TOTAL;
+    document.getElementById('progress').style.width = (n / TOTAL * 100) + '%';
+  }
+
+  function nextSlide() { if (current < TOTAL) { current++; showSlide(current); } }
+  function prevSlide() { if (current > 1)     { current--; showSlide(current); } }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown')  nextSlide();
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')    prevSlide();
+  });
+
+  showSlide(1);
+</script>
+</body>
+</html>

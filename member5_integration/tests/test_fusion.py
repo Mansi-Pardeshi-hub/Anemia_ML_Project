@@ -50,6 +50,25 @@ def test_fusion_bundle_and_dimensions():
     assert preds_df["participant_id"].is_unique
 
 
+def _rebase_img_path(raw_path: str) -> Path:
+    """
+    Rebase an image path from a saved parquet/CSV to the current project root.
+    Saved artefacts may contain absolute paths from the original development machine.
+    Strips everything before the first dataset or member directory and re-roots.
+    """
+    from paths import PROJECT_ROOT
+    p = Path(str(raw_path))
+    if p.exists():
+        return p
+    parts = p.parts
+    for i, part in enumerate(parts):
+        if part in ("datasets", "member4_ml_modelling", "member5_integration"):
+            candidate = PROJECT_ROOT / Path(*parts[i:])
+            if candidate.exists():
+                return candidate
+    return p  # return original; predict_image will handle the unreadable file gracefully
+
+
 def test_fused_adapter_paired_prediction_matches_saved():
     full_df = pd.read_parquet(FULLHAND_FEAT_PARQUET)
     nail_df = pd.read_parquet(NAIL_FEAT_PARQUET)
@@ -62,8 +81,8 @@ def test_fused_adapter_paired_prediction_matches_saved():
     full_row = full_df[full_df["participant_id"].astype(int) == pid].iloc[0]
     nail_rows = nail_df[nail_df["participant_id"].astype(int) == pid]
 
-    full_img = Path(str(full_row["abs_image_path"]))
-    nail_imgs = [Path(str(p)) for p in nail_rows["abs_image_path"].tolist()]
+    full_img = _rebase_img_path(str(full_row["abs_image_path"]))
+    nail_imgs = [_rebase_img_path(str(p)) for p in nail_rows["abs_image_path"].tolist()]
 
     adapter = FusedHandNailXGBAdapter().load()
     res = adapter.predict_paired(full_img, nail_imgs)

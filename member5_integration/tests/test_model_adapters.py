@@ -323,6 +323,29 @@ def test_app_inference_matches_saved_csv_predictions():
         FullHandXGBAdapter, NailXGBAdapter, EyeXGBAdapter, FullHandScratchCNNXGBAdapter
     )
 
+    from paths import PROJECT_ROOT
+
+    def _rebase_img_path(raw_path: str) -> Path:
+        """
+        Rebase an image_path from a saved CSV to the current project root.
+        Saved CSVs may contain absolute paths from the original development machine.
+        We strip everything up to and including 'Anemia_ML_Project/' and re-join
+        with the current PROJECT_ROOT.
+        """
+        p = Path(str(raw_path))
+        # Try as-is first (works if project root hasn't moved)
+        if p.exists():
+            return p
+        # Find 'datasets/' or 'member' in the parts and re-root
+        parts = p.parts
+        for i, part in enumerate(parts):
+            if part in ("datasets", "member4_ml_modelling", "member5_integration"):
+                rel = Path(*parts[i:])
+                candidate = PROJECT_ROOT / rel
+                if candidate.exists():
+                    return candidate
+        return p  # return original even if not found; test will get None prediction
+
     checks = [
         (FullHandXGBAdapter, M4_METRICS / "full_hand_xgb_reg_predictions.csv", "predicted"),
         (NailXGBAdapter,     M4_METRICS / "nail_xgb_reg_predictions.csv",      "predicted"),
@@ -332,7 +355,7 @@ def test_app_inference_matches_saved_csv_predictions():
     for cls, csv_path, pred_col in checks:
         df = pd.read_csv(csv_path)
         row0 = df.iloc[0]
-        img_path = Path(str(row0["image_path"]))
+        img_path = _rebase_img_path(str(row0["image_path"]))
         saved_pred = float(row0[pred_col])
         adapter = cls().load()
         res = adapter.predict_image(img_path)
